@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8" />
+    <title>fibonacci-wasm</title>
+  </head>
+  <body>
+    <script type="module">
+      import init, { result, fibonacci } from "./pkg/fibonacci_wasm.js";
+      function fibonacci_js(num) {
+        if (num <= 1) return 1;
+        return fibonacci_js(num - 1) + fibonacci_js(num - 2);
+      }
+      const NUMBER = 44;
+
+      init().then(() => {
+        const start_wasm = performance.now();
+        fibonacci(NUMBER);
+        const end_wasm = performance.now();
+        console.log(`wasm: ${end_wasm - start_wasm}`);
+
+        const start_js = performance.now();
+        fibonacci_js(NUMBER);
+        const end_js = performance.now();
+        console.log(`js: ${end_js - start_js}`);
+      });
+    </script>
+  </body>
+</html>
