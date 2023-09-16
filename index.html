@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en-US">
   <head>
     <meta charset="utf-8" />
@@ -7,22 +7,31 @@
   <body>
     <script type="module">
       import init, { result, fibonacci } from "./pkg/fibonacci_wasm.js";
+
       function fibonacci_js(num) {
         if (num <= 1) return 1;
         return fibonacci_js(num - 1) + fibonacci_js(num - 2);
       }
-      const NUMBER = 44;
 
+      const NUMBER = 40;
+      const wasm_times = [];
+      const js_times = [];
       init().then(() => {
-        const start_wasm = performance.now();
-        fibonacci(NUMBER);
-        const end_wasm = performance.now();
-        console.log(`wasm: ${end_wasm - start_wasm}`);
+        for (let i = 1; i <= NUMBER; i++) {
+          const start_wasm = performance.now();
+          fibonacci(i);
+          const end_wasm = performance.now();
+          wasm_times.push(end_wasm - start_wasm);
 
-        const start_js = performance.now();
-        fibonacci_js(NUMBER);
-        const end_js = performance.now();
-        console.log(`js: ${end_js - start_js}`);
+          const start_js = performance.now();
+          fibonacci_js(i);
+          const end_js = performance.now();
+          js_times.push(end_js - start_js);
+        }
+        console.log('wasm');
+        console.log(wasm_times);
+        console.log('js');
+        console.log(js_times);
       });
     </script>
   </body>
